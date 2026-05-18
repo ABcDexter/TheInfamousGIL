@@ -2,6 +2,9 @@ import threading
 import time
 import os
 import sys
+import cProfile
+import pstats
+from io import StringIO
 
 def cpu_task(n):
     """
@@ -48,6 +51,36 @@ def main():
         elapsed = run(threads, n)
         print(f"{threads:2d} threads: {elapsed:.2f} seconds")
 
-if __name__ == "__main__":
-    # call main 
+def profile_main():
+    '''
+    Profile the main function and print the results.
+    '''
+    profiler = cProfile.Profile()
+    profiler.enable()
+    
     main()
+    
+    profiler.disable()
+    
+    # Print profiling results
+    """
+    s = StringIO()
+    ps = pstats.Stats(profiler, stream=s).sort_stats('cumulative')
+    ps.print_stats()
+    print(s.getvalue())
+    """
+    # Print profiling results
+    s = StringIO()
+    ps = pstats.Stats(profiler, stream=s).sort_stats('cumulative')
+    ps.print_stats(10)  # Print top 10 functions
+    print(f"\n{'='*80}")
+    print("PROFILING RESULTS (Top 10 functions by cumulative time):")
+    print(f"{'='*80}")
+    print(s.getvalue())
+
+
+if __name__ == "__main__":    
+    # invoke the main function to run the benchmark
+    #main()
+    # invoke the profiling function to run the benchmark with profiling
+    profile_main()
