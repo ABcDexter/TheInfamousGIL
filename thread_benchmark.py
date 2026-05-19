@@ -21,6 +21,19 @@ def worker(n):
     '''
     cpu_task(n)
 
+def io_task(n):
+    """
+    A simple I/O-bound task that performs repeated sleeps.
+    """
+    for _ in range(n):
+        time.sleep(0.0001)
+
+def io_worker(n):
+    '''
+    Worker function that calls the I/O-bound task.
+    '''
+    io_task(n)
+
 def run(num_threads, n):
     """
     Run the benchmark with the specified number of threads and iterations.
@@ -38,9 +51,27 @@ def run(num_threads, n):
 
     return time.perf_counter() - start
 
+def run_io(num_threads, n):
+    """
+    Run the I/O benchmark with the specified number of threads.
+    """
+    threads = []
+    start = time.perf_counter()
+
+    for _ in range(num_threads):
+        t = threading.Thread(target=io_worker, args=(n,))
+        t.start()
+        threads.append(t)
+
+    for t in threads:
+        t.join()
+
+    return time.perf_counter() - start
+
 def main():
     '''Main function to run the benchmark.'''
     n = 30_000_000
+    io_n = 3_000
     max_threads = min(os.cpu_count() or 1, 8)
     
     print(f"CPU cores: {os.cpu_count()}")
@@ -49,6 +80,12 @@ def main():
 
     for threads in [1, 2, 4, max_threads]:
         elapsed = run(threads, n)
+        print(f"{threads:2d} threads: {elapsed:.2f} seconds")
+
+    print("\nI/O-bound benchmark")
+    print(f"Sleep iterations per thread: {io_n:_}")
+    for threads in [1, 2, 4, max_threads]:
+        elapsed = run_io(threads, io_n)
         print(f"{threads:2d} threads: {elapsed:.2f} seconds")
 
 def profile_main():
