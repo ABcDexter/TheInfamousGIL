@@ -107,6 +107,7 @@ def profile_main():
     print(s.getvalue())
     """
     # Print profiling results
+    '''
     s = StringIO()
     ps = pstats.Stats(profiler, stream=s).sort_stats('cumulative')
     ps.print_stats(10)  # Print top 10 functions
@@ -114,6 +115,7 @@ def profile_main():
     print("PROFILING RESULTS (Top 10 functions by cumulative time):")
     print(f"{'='*80}")
     print(s.getvalue())
+    '''
 
 
 if __name__ == "__main__":    

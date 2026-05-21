@@ -11,10 +11,10 @@ def is_prime(n):
     """
     if n in (2, 3):
         return True
-    if (n < 2) or (n % 2 == 0):
+    if (n < 2) or not (n&1): # Check for even numbers greater than 2
         return False
 
-    #limit = n//20_000+1 #
+    #limit = n//20_000+1 # for cool looking progress
     limit =  int(n**0.5) + 1
     for divisor in range(3, limit, 2):
         if n % divisor == 0:
