@@ -81,12 +81,13 @@ def main():
     for threads in [1, 2, 4, max_threads]:
         elapsed = run(threads, n)
         print(f"{threads:2d} threads: {elapsed:.2f} seconds")
-
+    '''
     print("\nI/O-bound benchmark")
     print(f"Sleep iterations per thread: {io_n:_}")
     for threads in [1, 2, 4, max_threads]:
         elapsed = run_io(threads, io_n)
         print(f"{threads:2d} threads: {elapsed:.2f} seconds")
+    '''
 
 def profile_main():
     '''
