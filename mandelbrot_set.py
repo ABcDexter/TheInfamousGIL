@@ -64,23 +64,27 @@ def run_threads(num_workers, x_values, y_values, max_iterations, chunk_size=8):
 
 
 def plot_mandelbrot(iteration_array, x_values, y_values, cmap="nipy_spectral"):
-    """
-    Render the Mandelbrot set using Matplotlib.
-    """
-    if not HAS_PLOTTING:
-        print("Matplotlib or NumPy not installed. Skipping plot.")
-        return
+	"""
+	Render the Mandelbrot set using Matplotlib with a more appealing color scheme.
+	"""
+	if not HAS_PLOTTING:
+		print("Matplotlib or NumPy not installed. Skipping plot.")
+		return
 
-    iteration_np = np.array(iteration_array)
-    fig, ax = plt.subplots(figsize=(8, 8))
-    extent = [x_values[0], x_values[-1], y_values[0], y_values[-1]]
-    img = ax.imshow(iteration_np, cmap=cmap, extent=extent, origin="lower", aspect="auto")
-    ax.set_xlabel("Real axis")
-    ax.set_ylabel("Imaginary axis")
-    ax.set_title("Mandelbrot set")
-    fig.colorbar(img, ax=ax, label="Escape time")
-    plt.tight_layout()
-    plt.show()
+	iteration_np = np.array(iteration_array)
+	fig, ax = plt.subplots(figsize=(8, 8))
+	extent = [x_values[0], x_values[-1], y_values[0], y_values[-1]]
+	# Use a masked array to make points inside the set black
+	masked = np.ma.masked_where(iteration_np == iteration_np.max(), iteration_np)
+	img = ax.imshow(masked, cmap="twilight_shifted", extent=extent, origin="lower", aspect="auto", interpolation="bilinear")
+	# Overlay the set itself in black
+	ax.imshow(iteration_np == iteration_np.max(), cmap="gray", extent=extent, origin="lower", aspect="auto", alpha=0.8)
+	ax.set_xlabel("Real axis")
+	ax.set_ylabel("Imaginary axis")
+	ax.set_title("Mandelbrot set (twilight_shifted colormap)")
+	fig.colorbar(img, ax=ax, label="Escape time")
+	plt.tight_layout()
+	plt.show()
 
 
 def time_function(func, *args, **kwargs):
