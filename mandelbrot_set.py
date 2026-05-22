@@ -2,6 +2,7 @@ import concurrent.futures
 import time
 import os
 import sys
+from matplotlib.colors import LinearSegmentedColormap
 
 try:
     import numpy as np
@@ -65,7 +66,7 @@ def run_threads(num_workers, x_values, y_values, max_iterations, chunk_size=8):
 
 def plot_mandelbrot(iteration_array, x_values, y_values, cmap="nipy_spectral"):
 	"""
-	Render the Mandelbrot set using Matplotlib with a more appealing color scheme.
+	Render the Mandelbrot set using Sunset Silhouette colormap.
 	"""
 	if not HAS_PLOTTING:
 		print("Matplotlib or NumPy not installed. Skipping plot.")
@@ -74,14 +75,22 @@ def plot_mandelbrot(iteration_array, x_values, y_values, cmap="nipy_spectral"):
 	iteration_np = np.array(iteration_array)
 	fig, ax = plt.subplots(figsize=(8, 8))
 	extent = [x_values[0], x_values[-1], y_values[0], y_values[-1]]
+	
+	# Create vibrant Mandelbrot colormap: deep blue -> purple -> pink -> gold
+	colors = ['#00051A', '#1A0033', '#5D0066', '#CC00FF', '#FF1493', '#FFD700']
+	n_bins = 256
+	mandelbrot_cmap = LinearSegmentedColormap.from_list('Mandelbrot Vibes', colors, N=n_bins)
+	
 	# Use a masked array to make points inside the set black
 	masked = np.ma.masked_where(iteration_np == iteration_np.max(), iteration_np)
-	img = ax.imshow(masked, cmap="twilight_shifted", extent=extent, origin="lower", aspect="auto", interpolation="bilinear")
+	img = ax.imshow(masked, cmap=mandelbrot_cmap, extent=extent, origin="lower", aspect="auto", interpolation="bilinear")
+	
 	# Overlay the set itself in black
 	ax.imshow(iteration_np == iteration_np.max(), cmap="gray", extent=extent, origin="lower", aspect="auto", alpha=0.8)
+	
 	ax.set_xlabel("Real axis")
 	ax.set_ylabel("Imaginary axis")
-	ax.set_title("Mandelbrot set (twilight_shifted colormap)")
+	ax.set_title("Mandelbrot set (Deep Blue → Purple → Magenta → Gold)")
 	fig.colorbar(img, ax=ax, label="Escape time")
 	plt.tight_layout()
 	plt.show()
