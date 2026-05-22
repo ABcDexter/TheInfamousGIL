@@ -26,6 +26,7 @@ def io_task(n):
     A simple I/O-bound task that performs repeated sleeps.
     """
     for _ in range(n):
+        # just waiting for some data from the disk or network
         time.sleep(0.0001)
 
 def io_worker(n):
