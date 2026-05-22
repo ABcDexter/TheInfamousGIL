@@ -1,0 +1,49 @@
+=================================
+CPU Sequential
+=================================
+Running 20s test @ http://127.0.0.1:8000/cpu-seq
+  8 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.20s   303.00ms   1.98s    86.67%
+    Req/Sec     8.83      8.68    50.00     76.32%
+  711 requests in 20.08s, 141.51KB read
+  Socket errors: connect 0, read 0, write 0, timeout 666
+Requests/sec:     35.40
+Transfer/sec:      7.05KB
+
+=================================
+CPU Threaded
+=================================
+Running 20s test @ http://127.0.0.1:8000/cpu-thread
+  8 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.00us    0.00us   0.00us     nan%
+    Req/Sec     6.92      5.69    30.00     77.58%
+  444 requests in 20.08s, 87.48KB read
+  Socket errors: connect 0, read 0, write 0, timeout 444
+Requests/sec:     22.11
+Transfer/sec:      4.36KB
+
+=================================
+IO Bound
+=================================
+Running 20s test @ http://127.0.0.1:8000/io
+  8 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    53.55ms    4.17ms  91.58ms   91.27%
+    Req/Sec   468.23     61.07   505.00     87.00%
+  74696 requests in 20.04s, 9.83MB read
+Requests/sec:   3726.83
+Transfer/sec:    502.25KB
+
+=================================
+Mixed
+=================================
+Running 20s test @ http://127.0.0.1:8000/mixed
+  8 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   676.70ms   69.80ms 842.46ms   81.08%
+    Req/Sec    19.16     12.70    80.00     79.08%
+  2796 requests in 20.08s, 468.28KB read
+Requests/sec:    139.27
+Transfer/sec:     23.32KB
